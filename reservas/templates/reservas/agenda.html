@@ -1,0 +1,44 @@
+{% extends 'reservas/base.html' %}
+{% block content %}
+<h2>Agenda de Reservas por Día</h2>
+<form method="GET" class="mb-4">
+    <div class="row align-items-end">
+        <div class="col-md-3">
+            <label class="form-label">Seleccione Fecha</label>
+            <input type="date" name="fecha" class="form-control" value="{{ fecha }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Ver Agenda</button>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover border">
+        <thead class="table-dark">
+            <tr>
+                <th>Espacio</th>
+                <th>Usuario</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Motivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reservas %}
+            <tr>
+                <td>{{ r.espacio.nombre }}</td>
+                <td>{{ r.usuario.get_full_name|default:r.usuario.username }}</td>
+                <td>{{ r.fecha_hora_inicio|date:"H:i" }}</td>
+                <td>{{ r.fecha_hora_fin|date:"H:i" }}</td>
+                <td>{{ r.detalle.motivo|default:"No especificado" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No hay reservas aprobadas para este día.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

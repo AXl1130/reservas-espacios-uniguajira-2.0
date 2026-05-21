@@ -1,0 +1,42 @@
+{% extends 'reservas/base.html' %}
+{% block content %}
+<h2>Consulta de Disponibilidad</h2>
+<div class="card p-4 shadow-sm">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Espacio</label>
+                <select name="espacio" class="form-select" required>
+                    {% for e in espacios %}
+                        <option value="{{ e.id }}">{{ e.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Desde</label>
+                <input type="datetime-local" name="inicio" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Hasta</label>
+                <input type="datetime-local" name="fin" class="form-control" required>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100">Consultar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if resultado %}
+<div class="mt-4 alert {% if resultado.disponible %}alert-success{% else %}alert-danger{% endif %} text-center">
+    <h4>
+        {% if resultado.disponible %}
+            ¡Disponible! El espacio <strong>{{ resultado.espacio.nombre }}</strong> está libre en ese horario.
+        {% else %}
+            Ocupado. El espacio <strong>{{ resultado.espacio.nombre }}</strong> ya tiene una reserva aprobada.
+        {% endif %}
+    </h4>
+</div>
+{% endif %}
+{% endblock %}
