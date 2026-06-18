@@ -102,7 +102,7 @@ La aplicación quedará disponible en:
 - `http://127.0.0.1:8000/`
 
 ## Cómo usar la aplicación
-1. Inicia sesión o crea una cuenta.
+1. Inicia sesión o crea una cuenta (usuario:admin , contraseña:admin123)
 2. Dirígete a la sección de espacios para registrar nuevos lugares.
 3. Usa la opción de disponibilidad para verificar horarios.
 4. Crea una reserva desde el formulario correspondiente.
