@@ -1,0 +1,121 @@
+{% extends 'reservas/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+        
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="icon-circle bg-success-subtle mx-auto mb-3" style="width:64px;height:64px;">
+                <i class="bi bi-person-plus fs-2 text-success"></i>
+            </div>
+            <h3 class="fw-bold">Crear Cuenta</h3>
+            <p class="text-muted small">Sistema de Reservas — Uniguajira</p>
+        </div>
+
+        <!-- Card de Registro -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+
+                <!-- Formulario de registro -->
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger d-flex align-items-center border-0" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Por favor corrija los errores indicados.
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label fw-medium small">
+                            <i class="bi bi-person me-1"></i>Nombre de usuario
+                        </label>
+                        <input type="text" name="username" id="id_username" 
+                               class="form-control" placeholder="usuario123" required autofocus>
+                        {% if form.username.errors %}
+                            <div class="text-danger small mt-1">{{ form.username.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label fw-medium small">
+                            <i class="bi bi-envelope me-1"></i>Correo Electrónico
+                        </label>
+                        <input type="email" name="email" id="id_email" 
+                               class="form-control" placeholder="usuario@uniguajira.edu.co" required>
+                        {% if form.email.errors %}
+                            <div class="text-danger small mt-1">{{ form.email.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label fw-medium small">
+                            <i class="bi bi-lock me-1"></i>Contraseña
+                        </label>
+                        <div class="input-group">
+                            <input type="password" name="password1" id="id_password1" 
+                                   class="form-control" placeholder="••••••••" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password" 
+                                    data-target="id_password1">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        {% if form.password1.errors %}
+                            <div class="text-danger small mt-1">{{ form.password1.errors|join:", " }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            <i class="bi bi-shield-check me-1"></i>Mínimo 8 caracteres, no puede ser común ni solo numérica.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_password2" class="form-label fw-medium small">
+                            <i class="bi bi-lock-fill me-1"></i>Confirmar Contraseña
+                        </label>
+                        <input type="password" name="password2" id="id_password2" 
+                               class="form-control" placeholder="Repite la contraseña" required>
+                        {% if form.password2.errors %}
+                            <div class="text-danger small mt-1">{{ form.password2.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 btn-lg mb-3">
+                        <i class="bi bi-person-check-fill me-2"></i>Crear Cuenta
+                    </button>
+                </form>
+
+                <!-- Separador -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <hr class="flex-grow-1">
+                    <span class="text-muted small">o regístrate con</span>
+                    <hr class="flex-grow-1">
+                </div>
+
+                <!-- Social Signup -->
+                <div class="d-grid gap-2">
+                    <a href="{% url 'google_login' %}" class="btn btn-outline-danger d-flex align-items-center justify-content-center gap-2 py-2">
+                        <i class="bi bi-google fs-5"></i> Continuar con Google
+                    </a>
+                    <a href="{% url 'github_login' %}" class="btn btn-outline-dark d-flex align-items-center justify-content-center gap-2 py-2">
+                        <i class="bi bi-github fs-5"></i> Continuar con GitHub
+                    </a>
+                </div>
+
+                <!-- Link de login -->
+                <div class="text-center mt-4">
+                    <p class="text-muted small mb-0">
+                        ¿Ya tienes cuenta? 
+                        <a href="{% url 'account_login' %}" class="fw-semibold text-decoration-none">
+                            Inicia sesión aquí <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

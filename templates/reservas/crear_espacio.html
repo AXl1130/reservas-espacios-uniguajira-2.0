@@ -1,0 +1,139 @@
+{% extends 'reservas/base.html' %}
+{% block content %}
+
+<div class="d-flex align-items-center mb-4">
+    <div class="icon-circle bg-success-subtle me-3">
+        <i class="bi bi-building-add fs-4 text-success"></i>
+    </div>
+    <div>
+        <h2 class="mb-0 fw-semibold">Nuevo Espacio</h2>
+        <p class="text-muted small mb-0">Completa los datos para registrar un espacio físico</p>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show d-flex align-items-center border-0 shadow-sm" role="alert">
+        {% if message.tags == 'success' %}
+            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+        {% elif message.tags == 'error' %}
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+        {% else %}
+            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+        {% endif %}
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row g-4">
+    <!-- Formulario -->
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">
+                    <i class="bi bi-pencil-square me-2 text-primary"></i>Datos del Espacio
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Paso 1: Nombre -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <span class="badge bg-primary me-2">1</span> Nombre del espacio
+                        </label>
+                        <input type="text" name="nombre" class="form-control form-control-lg" 
+                               placeholder="Ej: Salón 301, Auditorio Principal, Laboratorio de Redes" 
+                               required autofocus>
+                        <div class="form-text">
+                            <i class="bi bi-lightbulb me-1"></i>Un nombre claro y descriptivo. Ej: "Salón de Audiovisuales 202"
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Tipo -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <span class="badge bg-primary me-2">2</span> Tipo de espacio
+                        </label>
+                        <select name="tipo_espacio" class="form-select form-select-lg">
+                            <option value="">— Selecciona un tipo existente —</option>
+                            {% for t in tipos %}
+                                <option value="{{ t.id }}">{{ t.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text mb-2">
+                            <i class="bi bi-lightbulb me-1"></i>Elige uno de los tipos predefinidos o crea uno nuevo.
+                        </div>
+                        <input type="text" name="nuevo_tipo" class="form-control form-control-lg"
+                               placeholder="Ej: Gimnasio, Sala de reuniones, Laboratorio">
+                        <div class="form-text">
+                            <i class="bi bi-plus-circle me-1"></i>Si no aparece el tipo que necesitas, escríbelo aquí.
+                        </div>
+                    </div>
+
+                    <!-- Paso 3: Ubicación -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <span class="badge bg-primary me-2">3</span> Ubicación
+                        </label>
+                        <input type="text" name="ubicacion" class="form-control form-control-lg" 
+                               placeholder="Ej: Bloque A, Piso 2" required>
+                        <div class="form-text">
+                            <i class="bi bi-lightbulb me-1"></i>Indica dónde queda físicamente. Ej: "Bloque Norte, Primer Piso"
+                        </div>
+                    </div>
+
+                    <!-- Paso 4: Capacidad -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <span class="badge bg-primary me-2">4</span> Capacidad de personas
+                        </label>
+                        <input type="number" name="capacidad" class="form-control form-control-lg" 
+                               placeholder="Ej: 30" min="1" required>
+                        <div class="form-text">
+                            <i class="bi bi-lightbulb me-1"></i>¿Cuántas personas caben en este espacio?
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="d-grid gap-2 d-md-flex pt-3 border-top">
+                        <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm">
+                            <i class="bi bi-check-lg me-1"></i>Guardar Espacio
+                        </button>
+                        <a href="{% url 'mis_espacios' %}" class="btn btn-outline-secondary btn-lg px-4">
+                            <i class="bi bi-x-lg me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de ayuda -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-body p-4">
+                <h5 class="fw-semibold mb-3">
+                    <i class="bi bi-question-circle me-2 text-primary"></i>¿Qué es un espacio?
+                </h5>
+                <p class="text-muted small">
+                    Un <strong>espacio</strong> es cualquier lugar físico que se puede reservar:
+                </p>
+                <ul class="small text-muted mb-3">
+                    <li>🏫 Salones de clase</li>
+                    <li>🎤 Auditorios</li>
+                    <li>💻 Laboratorios de cómputo</li>
+                    <li>📚 Salas de estudio</li>
+                    <li>🏢 Oficinas</li>
+                </ul>
+                <p class="text-muted small mb-0">
+                    Una vez creado, cualquier usuario podrá reservarlo si está disponible.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'reservas/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+        
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="icon-circle bg-primary-subtle mx-auto mb-3" style="width:64px;height:64px;">
+                {% if provider.name == 'Google' %}
+                    <i class="bi bi-google fs-2 text-danger"></i>
+                {% elif provider.name == 'GitHub' %}
+                    <i class="bi bi-github fs-2 text-dark"></i>
+                {% else %}
+                    <i class="bi bi-person-check fs-2 text-primary"></i>
+                {% endif %}
+            </div>
+            <h3 class="fw-bold">Conectar con {{ provider.name }}</h3>
+            <p class="text-muted small">
+                {% if process == 'login' %}
+                    Iniciar sesión con tu cuenta de {{ provider.name }}
+                {% elif process == 'connect' %}
+                    Vincular tu cuenta de {{ provider.name }}
+                {% else %}
+                    Crear cuenta con {{ provider.name }}
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Card -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 text-center">
+                
+                {% if provider.name == 'Google' %}
+                    <i class="bi bi-google display-3 text-danger mb-3 d-block"></i>
+                    <p class="text-muted">Serás redirigido a Google para autenticarte.</p>
+                {% elif provider.name == 'GitHub' %}
+                    <i class="bi bi-github display-3 text-dark mb-3 d-block"></i>
+                    <p class="text-muted">Serás redirigido a GitHub para autenticarte.</p>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Continuar con {{ provider.name }}
+                    </button>
+                </form>
+
+                <div class="mt-4">
+                    <small class="text-muted">
+                        Al continuar, aceptas compartir tu información de perfil 
+                        con el Sistema de Reservas Uniguajira.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'account_login' %}" class="text-muted small text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>Volver al inicio de sesión
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

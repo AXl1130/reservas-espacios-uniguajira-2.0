@@ -37,7 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reservas',
+    'django.contrib.sites',
+    # Terceros
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    # Apps locales
+    'apps.reservas',
 ]
 
 MIDDLEWARE = [
@@ -48,14 +56,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'sistema_reservas.urls'
+ROOT_URLCONF = 'mi_proyecto.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sistema_reservas.wsgi.application'
+WSGI_APPLICATION = 'mi_proyecto.wsgi.application'
 
 
 # Database
@@ -117,7 +126,53 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================================================
+# Configuración de Autenticación (django-allauth)
+# ============================================================
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+# Permitir login con email O username (nueva sintaxis allauth >=65)
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Cambiar a 'mandatory' en producción
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+
+# URLs de redirección
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'account_login'
+LOGIN_URL = 'account_login'
+
+# Social Accounts
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': 'TU_GOOGLE_CLIENT_ID',
+            'secret': 'TU_GOOGLE_SECRET',
+        }
+    },
+    'github': {
+        'SCOPE': ['user:email'],
+        'APP': {
+            'client_id': 'TU_GITHUB_CLIENT_ID',
+            'secret': 'TU_GITHUB_SECRET',
+        }
+    },
+}
+
+# No cerrar sesión al cerrar navegador
+ACCOUNT_LOGOUT_ON_GET = False
+ACCOUNT_SESSION_REMEMBER = True
